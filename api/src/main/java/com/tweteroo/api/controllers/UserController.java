@@ -18,7 +18,6 @@ public class UserController {
 
   @PostMapping
   public String createUser(@RequestBody UserDTO req) {
-
     repository.save(new Users(req));
     
     return "OK";

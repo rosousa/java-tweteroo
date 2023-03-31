@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tweteroo.api.dto.TweetDTO;
 import com.tweteroo.api.models.Tweet;
+import com.tweteroo.api.models.Users;
 import com.tweteroo.api.repositories.TweetRepository;
+import com.tweteroo.api.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/api/tweets")
@@ -16,9 +18,14 @@ public class TweetController {
   @Autowired
   private TweetRepository tweetRepository;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @PostMapping
   public String createTweet(@RequestBody TweetDTO req) {
-    tweetRepository.save(new Tweet(req));
+    Users user = userRepository.findByUsername(req.username());
+    
+    tweetRepository.save(new Tweet(req, user.getAvatar()));
     
     return "OK";
   }
