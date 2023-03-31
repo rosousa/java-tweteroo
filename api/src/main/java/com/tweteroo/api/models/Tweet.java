@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class tweet {
+public class Tweet {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
