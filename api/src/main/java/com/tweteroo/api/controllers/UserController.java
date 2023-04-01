@@ -27,8 +27,14 @@ public class UserController {
     return "OK";
   }
 
+  // change to another route
   @PutMapping("/{id}")
   public void updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO req) {
-    userRepository.save(new Users(req));
+    userRepository.findById(id).map(person -> {
+      person.setUsername(req.username());
+      person.setAvatar(req.avatar());
+
+      return userRepository.save(person);
+    });
   }
 }
