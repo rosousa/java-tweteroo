@@ -1,9 +1,15 @@
 package com.tweteroo.api.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tweteroo.api.dto.TweetDTO;
@@ -28,5 +34,23 @@ public class TweetController {
     tweetRepository.save(new Tweet(req, user.getAvatar()));
     
     return "OK";
+  }
+  
+  @GetMapping
+  public List<Tweet> getTweets(@RequestParam(required = true, name = "page") int page) {
+    List<Tweet> tweets = tweetRepository.findAll();
+
+    List<Tweet> tweetsPage = new ArrayList<>();
+
+    for(int i = page*5-5; i < page*5; i++){
+      tweetsPage.add(tweets.get(i));
+    }
+
+    return tweetsPage;
+  }
+
+  @GetMapping("/{username}")
+  public List<Tweet> getUserTweets(@PathVariable String username) {
+    return tweetRepository.findByUsername(username);
   }
 }

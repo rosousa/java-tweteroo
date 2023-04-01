@@ -10,6 +10,8 @@ import com.tweteroo.api.dto.UserDTO;
 import com.tweteroo.api.models.Users;
 import com.tweteroo.api.repositories.UserRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/sign-up")
 public class UserController {
@@ -17,7 +19,7 @@ public class UserController {
   private UserRepository repository;
 
   @PostMapping
-  public String createUser(@RequestBody UserDTO req) {
+  public String createUser(@RequestBody @Valid UserDTO req) {
     repository.save(new Users(req));
     
     return "OK";
