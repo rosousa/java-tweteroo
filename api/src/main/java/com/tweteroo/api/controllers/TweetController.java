@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,8 @@ import com.tweteroo.api.models.Users;
 import com.tweteroo.api.repositories.TweetRepository;
 import com.tweteroo.api.repositories.UserRepository;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/tweets")
 public class TweetController {
@@ -28,7 +31,7 @@ public class TweetController {
   private UserRepository userRepository;
 
   @PostMapping
-  public String createTweet(@RequestBody TweetDTO req) {
+  public String createTweet(@RequestBody @Valid TweetDTO req) {
     Users user = userRepository.findByUsername(req.username());
     
     tweetRepository.save(new Tweet(req, user.getAvatar()));
@@ -52,5 +55,10 @@ public class TweetController {
   @GetMapping("/{username}")
   public List<Tweet> getUserTweets(@PathVariable String username) {
     return tweetRepository.findByUsername(username);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteTweet(@PathVariable Long id) {
+    tweetRepository.deleteById(id);
   }
 }
