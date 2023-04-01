@@ -1,7 +1,9 @@
 package com.tweteroo.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +18,17 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/sign-up")
 public class UserController {
   @Autowired
-  private UserRepository repository;
+  private UserRepository userRepository;
 
   @PostMapping
   public String createUser(@RequestBody @Valid UserDTO req) {
-    repository.save(new Users(req));
+    userRepository.save(new Users(req));
     
     return "OK";
+  }
+
+  @PutMapping("/{id}")
+  public void updateUser(@PathVariable Long id, @RequestBody @Valid UserDTO req) {
+    userRepository.save(new Users(req));
   }
 }
